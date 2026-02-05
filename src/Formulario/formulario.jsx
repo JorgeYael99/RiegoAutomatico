@@ -4,6 +4,12 @@ import { useNavigate } from 'react-router-dom';
 // Importa los íconos de react-icons
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 
+// --- CONFIGURACIÓN DE LA API ---
+// Si estamos en producción (Vercel), usa la ruta relativa '/api'
+// Si estamos en desarrollo (Local), usa 'http://localhost:5000'
+// Nota: Si usas "Create React App" en vez de Vite, cambia import.meta.env.PROD por process.env.NODE_ENV === 'production'
+const API_URL = import.meta.env.PROD ? '/api' : 'http://localhost:5000';
+
 export function Formulario({ setNombre }) {
   const [nombreInput, setNombreInput] = useState('');
   const [password, setPassword] = useState('');
@@ -23,7 +29,8 @@ export function Formulario({ setNombre }) {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/login', {
+      // MODIFICADO: Usamos API_URL en lugar de la dirección fija
+      const response = await fetch(`${API_URL}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -61,7 +68,8 @@ export function Formulario({ setNombre }) {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/register', {
+      // MODIFICADO: Usamos API_URL en lugar de la dirección fija
+      const response = await fetch(`${API_URL}/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
