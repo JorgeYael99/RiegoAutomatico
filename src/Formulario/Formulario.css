@@ -1,0 +1,168 @@
+.formulario {
+  gap: 30px;
+  margin-top: 30px;
+  background-color: rgba(0, 0, 0, 0.719);
+  border-radius: 3rem;
+  padding: 3rem;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+
+}
+.frosted-glass {
+  background-color: rgba(0, 0, 0, 0.61); /* oscuro translúcido */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* para Safari */
+  border-radius: 1rem;
+  color: white;
+}
+
+.formulario:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+/*boton*/
+.custom-button {
+  padding: 0.10rem 2rem;
+  background-color: #f0f0f0;
+  color: rgb(255, 255, 255);
+  border-radius: 0.7rem;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.1s ease, box-shadow 0.3s ease;
+
+}
+.custom-button:hover {
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);  /* Sombra más grande y difusa */
+  transform: translateY(-3px);  /* Mueve el botón hacia arriba ligeramente */
+
+}
+
+/* --- ESTILOS COOL PARA BOTONES DE REDES SOCIALES (Formulario) --- */
+
+/* Estilo base para todos los botones de redes sociales */
+.social-button {
+width: 55px; /* Tamaño un poco más grande */
+height: 55px; /* Para que sea un círculo perfecto */
+border-radius: 50%; /* Los hace redondos */
+display: flex; /* Para centrar el ícono */
+align-items: center;
+justify-content: center;
+font-size: 1.8em; /* Tamaño del ícono */
+color: white; /* Color de los íconos */
+text-decoration: none; /* Quita el subrayado de los enlaces */
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Sombra suave para profundidad */
+transition: all 0.3s ease-in-out; /* Transiciones suaves para todos los efectos */
+position: relative; /* Necesario para efectos pseudo-elementos o glow */
+overflow: hidden; /* Asegura que el brillo no se salga de los límites */
+}
+
+/* Efecto Hover para todos los botones */
+.social-button:hover {
+transform: translateY(-7px) scale(1.1); /* Se levanta y crece ligeramente */
+box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6); /* Sombra más pronunciada al levantar */
+z-index: 2; /* Asegura que el botón hoverado esté por encima */
+}
+
+/* --- Colores específicos y efectos de brillo para cada red social --- */
+
+/* Facebook */
+.social-button.facebook {
+background-color: #3b5998; /* Azul de Facebook */
+}
+.social-button.facebook:hover {
+background-color: #2e4a86; /* Azul más oscuro al pasar el ratón */
+/* Efecto de brillo/glow */
+box-shadow: 0 0 30px #4267B2, 0 0 60px #4267B2, 0 0 90px #4267B2, 0 10px 25px rgba(0, 0, 0, 0.6);
+}
+
+/* Twitter */
+.social-button.twitter {
+background-color: #1da1f2; /* Azul de Twitter */
+}
+.social-button.twitter:hover {
+background-color: #0c85d0; /* Azul más oscuro al pasar el ratón */
+/* Efecto de brillo/glow */
+box-shadow: 0 0 30px #1da1f2, 0 0 60px #1da1f2, 0 0 90px #1da1f2, 0 10px 25px rgba(0, 0, 0, 0.6);
+}
+
+/* Instagram */
+.social-button.instagram {
+/* Gradiente de fondo para Instagram */
+background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+}
+.social-button.instagram:hover {
+/* No se cambia el fondo, solo la sombra para el brillo */
+/* Efecto de brillo/glow utilizando un color central del gradiente */
+box-shadow: 0 0 30px #e1306c, 0 0 60px #e1306c, 0 0 90px #e1306c, 0 10px 25px rgba(0, 0, 0, 0.6);
+}
+
+/* --- Fin de Estilos Cool --- */
+
+
+/* --- Estilos para los mensajes de Feedback (Éxito/Error) --- */
+.feedback-message {
+padding: 10px 15px;
+border-radius: 8px;
+margin-bottom: 15px;
+font-weight: bold;
+text-align: center;
+box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+animation: fadeInScale 0.5s ease-out; /* Animación de entrada */
+}
+
+.feedback-success {
+background-color: rgba(60, 179, 113, 0.9); /* Verde medio transparente */
+color: #fff;
+border: 1px solid #3cb371; /* Verde medio */
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.feedback-error {
+background-color: rgba(220, 20, 60, 0.9); /* Carmesí transparente */
+color: #fff; /* CAMBIADO: Color de texto blanco para mensajes de error */
+border: 1px solid #dc143c; /* Carmesí */
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeInScale {
+from {
+  opacity: 0;
+  transform: scale(0.9);
+}
+to {
+  opacity: 1;
+  transform: scale(1);
+}
+}
+
+/* --- Estilo para el texto "Conócenos:" --- */
+.social-text-prompt {
+color: #fff; /* CAMBIADO: Color de texto blanco para "Conócenos:" */
+font-size: 1.15em; /* Un poco más grande */
+font-weight: 600; /* Un poco más de negrita */
+letter-spacing: 0.5px; /* Espaciado entre letras */
+/* Mantengo una sombra sutil para un ligero efecto de profundidad o luz */
+text-shadow: 0 0 5px rgb(255, 255, 255);
+margin-bottom: 15px !important; /* Asegura un buen espacio con los botones */
+}
+
+/* --- Estilo para los campos de registro (inputs) --- */
+.form-control.custom-input {
+background-color: rgba(255, 255, 255, 0.1); /* Fondo transparente */
+color: #e0e0e0; /* Color de texto claro */
+border: 1px solid rgba(150, 255, 255, 0.3); /* Borde sutil y brillante */
+border-radius: 8px;
+padding: 10px 15px;
+transition: all 0.3s ease;
+}
+
+.form-control.custom-input::placeholder {
+color: rgba(255, 255, 255, 0.6); /* Color del placeholder */
+}
+
+.form-control.custom-input:focus {
+background-color: rgba(255, 255, 255, 0.15); /* Ligeramente más opaco al enfocar */
+border-color: #8affd1; /* Borde más brillante al enfocar */
+box-shadow: 0 0 0 0.25rem rgba(138, 255, 209, 0.25); /* Sombra de enfoque de Bootstrap con un toque de glow */
+color: #fff;
+}
