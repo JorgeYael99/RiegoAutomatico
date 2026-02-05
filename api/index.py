@@ -37,7 +37,7 @@ def conectar_db():
 # ------------------------------
 # RUTA DE LOGOUT (Con prefijo /api)
 # ------------------------------
-@app.route('/api/logout') # <--- CAMBIO AQUÍ
+@app.route('/api/logout')
 def logout():
     session.clear()
     return jsonify({'message': 'Sesión cerrada correctamente'})
@@ -45,7 +45,7 @@ def logout():
 # ------------------------------
 # RUTA DE LOGIN (Con prefijo /api)
 # ------------------------------
-@app.route('/api/login', methods=['POST']) # <--- CAMBIO AQUÍ
+@app.route('/api/login', methods=['POST'])
 def login():
     username = request.json.get('username')
     password = request.json.get('password')
@@ -77,13 +77,13 @@ def login():
             return jsonify({'success': False, 'message': 'Usuario no encontrado'})
 
     except Exception as e:
-        print(f"Error Login: {str(e)}") # Esto ayuda a verlo en los logs de Vercel
+        print(f"Error Login: {str(e)}") 
         return jsonify({'success': False, 'message': f'Error de conexión: {str(e)}'}), 500
 
 # ------------------------------
 # RUTA DE REGISTRO (Con prefijo /api)
 # ------------------------------
-@app.route('/api/register', methods=['POST']) # <--- CAMBIO AQUÍ
+@app.route('/api/register', methods=['POST'])
 def register():
     username = request.json.get('username')
     password = request.json.get('password')
@@ -118,11 +118,32 @@ def register():
         return jsonify({'success': False, 'message': f'Error: {str(e)}'}), 500
 
 # ------------------------------
-# RUTAS DE PRUEBA
+# RUTA ESPECIAL PARA CREAR LA TABLA (MIGRACIÓN)
 # ------------------------------
 @app.route('/')
 def home():
-    return "API Riego Automático Funcionando 💧"
+    try:
+        conn = conectar_db()
+        cursor = conn.cursor()
+        
+        # Este comando crea la tabla si no existe
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS usuarios (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                username VARCHAR(50) NOT NULL UNIQUE,
+                password VARCHAR(255) NOT NULL,
+                role VARCHAR(20) DEFAULT 'user'
+            );
+        """)
+        
+        conn.commit()
+        cursor.close()
+        conn.close()
+        
+        return "<h1>¡Tabla 'usuarios' creada con éxito! 🛠️✅</h1><p>Ahora intenta registrarte de nuevo.</p>"
+    
+    except Exception as e:
+        return f"<h1>Error creando tabla:</h1><p>{str(e)}</p>"
 
 if __name__ == '__main__':
     app.run(debug=True)
