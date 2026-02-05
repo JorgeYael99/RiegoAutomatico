@@ -120,8 +120,8 @@ def register():
 # ------------------------------
 # RUTA ESPECIAL PARA CREAR LA TABLA (MIGRACIÓN)
 # ------------------------------
-@app.route('/')
-def home():
+@app.route('/api/setup')
+def setup_db():
     try:
         conn = conectar_db()
         cursor = conn.cursor()
@@ -140,7 +140,7 @@ def home():
         cursor.close()
         conn.close()
         
-        return "<h1>¡Tabla 'usuarios' creada con éxito! 🛠️✅</h1><p>Ahora intenta registrarte de nuevo.</p>"
+        return "<h1>¡Tabla 'usuarios' creada con éxito! 🛠️✅</h1><p>Ya puedes cerrar esta pestaña e ir a registrarte.</p>"
     
     except Exception as e:
         return f"<h1>Error creando tabla:</h1><p>{str(e)}</p>"
