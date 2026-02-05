@@ -1,46 +1,51 @@
-from flask import Flask, request, jsonify, session, render_template
+from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 import pymysql
 import os
+import ssl # <--- NECESARIO PARA AIVEN
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
 
-# Permite conexiones desde cualquier origen (Local y Vercel)
+# Permite conexiones desde cualquier origen
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 # CONFIGURACIÓN SECRET KEY
-# Intenta leerla de Vercel, si no existe usa la frase local
 app.secret_key = os.getenv('SECRET_KEY', 'una_clave_secreta_segura')
 
 # ------------------------------
-# CONEXIÓN BASE DE DATOS
+# CONEXIÓN BASE DE DATOS (Arreglada para Aiven + Vercel)
 # ------------------------------
 def conectar_db():
+    # Creamos un contexto SSL que "perdona" si el certificado no es perfecto
+    # Esto evita el error "SSL connection error" en Aiven
+    ssl_context = ssl.create_default_context()
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+
     return pymysql.connect(
         host=os.getenv('DB_HOST'),
         user=os.getenv('DB_USER'),
         password=os.getenv('DB_PASSWORD'),
-        db=os.getenv('DB_NAME'),
-        port=int(os.getenv('DB_PORT', 3306)),
+        database=os.getenv('DB_NAME'),
+        port=int(os.getenv('DB_PORT', 11416)),
         charset='utf8mb4',
-        cursorclass=pymysql.cursors.DictCursor, # Importante para acceder como user['id']
-        # Corrección de sintaxis SSL para Aiven:
-        ssl={'ca': '/etc/ssl/cert.pem'}
+        cursorclass=pymysql.cursors.DictCursor,
+        ssl=ssl_context # <--- USAMOS EL CONTEXTO IMPORTADO
     )
 
 # ------------------------------
-# RUTA DE LOGOUT
+# RUTA DE LOGOUT (Con prefijo /api)
 # ------------------------------
-@app.route('/logout')
+@app.route('/api/logout') # <--- CAMBIO AQUÍ
 def logout():
     session.clear()
     return jsonify({'message': 'Sesión cerrada correctamente'})
 
 # ------------------------------
-# RUTA DE LOGIN
+# RUTA DE LOGIN (Con prefijo /api)
 # ------------------------------
-@app.route('/login', methods=['POST'])
+@app.route('/api/login', methods=['POST']) # <--- CAMBIO AQUÍ
 def login():
     username = request.json.get('username')
     password = request.json.get('password')
@@ -51,19 +56,12 @@ def login():
     try:
         conn = conectar_db()
         cursor = conn.cursor()
-        # Buscamos al usuario
         cursor.execute("SELECT id, username, password, role FROM usuarios WHERE username = %s", (username,))
         user = cursor.fetchone()
         cursor.close()
         conn.close()
 
         if user:
-            # user[2] es password, user[0] es id, etc. (Si usas DictCursor sería user['password'])
-            # Como tu código original usaba índices (user[2]),
-            # he ajustado la conexión arriba para usar DictCursor y aquí abajo usar claves, 
-            # ES MÁS SEGURO. Mira el cambio abajo:
-            
-            # Nota: Si arriba puse cursorclass=DictCursor, aquí debes usar nombres:
             if check_password_hash(user['password'], password):
                 session['user_id'] = user['id']
                 session['username'] = user['username']
@@ -79,12 +77,13 @@ def login():
             return jsonify({'success': False, 'message': 'Usuario no encontrado'})
 
     except Exception as e:
+        print(f"Error Login: {str(e)}") # Esto ayuda a verlo en los logs de Vercel
         return jsonify({'success': False, 'message': f'Error de conexión: {str(e)}'}), 500
 
 # ------------------------------
-# RUTA DE REGISTRO
+# RUTA DE REGISTRO (Con prefijo /api)
 # ------------------------------
-@app.route('/register', methods=['POST'])
+@app.route('/api/register', methods=['POST']) # <--- CAMBIO AQUÍ
 def register():
     username = request.json.get('username')
     password = request.json.get('password')
@@ -115,20 +114,12 @@ def register():
         return jsonify({'success': True, 'message': 'Registro exitoso. Puedes iniciar sesión ahora.'})
     
     except Exception as e:
+        print(f"Error Registro: {str(e)}")
         return jsonify({'success': False, 'message': f'Error: {str(e)}'}), 500
 
 # ------------------------------
-# RUTAS DE DASHBOARD
+# RUTAS DE PRUEBA
 # ------------------------------
-@app.route('/admin/dashboard')
-def admin_dashboard():
-    return "Panel de administración (Backend)"
-
-@app.route('/dashboard')
-def user_dashboard():
-    return "Panel de usuario (Backend)"
-
-# Ruta raíz para verificar que el servidor vive
 @app.route('/')
 def home():
     return "API Riego Automático Funcionando 💧"
