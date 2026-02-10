@@ -25,7 +25,7 @@ const [error, setError] = useState(false);
     const timer = setTimeout(() => {
       setError(true);
       setLoading(false);
-    }, 8000); // 8 segundos esperando conexión
+    }, 8000); 
 
     window.addEventListener("load", () => {
       clearTimeout(timer);
@@ -48,7 +48,7 @@ return (
 
 <Route path="/dashboard" element={<Dashboard nombre={nombre} />} />
 
-<Route path="/admin/dashboard" element={<Dashboard nombre={nombre} />} /> {/* Asumo que el dashboard es el mismo, solo cambia la ruta */}
+<Route path="/admin/dashboard" element={<Dashboard nombre={nombre} />} /> 
 
 <Route path="/plantas" element={<Plantas />} />
 

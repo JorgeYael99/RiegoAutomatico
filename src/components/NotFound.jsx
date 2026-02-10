@@ -1,3 +1,7 @@
+import React from 'react';
+import { Link } from 'react-router-dom'; 
+import '../components/LoadingScreen.css';
+
 const NotFound = () => {
   return (
     <div className="loading-container">
