@@ -12,6 +12,7 @@ import Dashboard from './Dashboard/Dashboard';
 
 import LoadingScreen from './components/LoadingScreen';
 
+import NotFound from './components/NotFound';
 
 
 export const App = () => {
@@ -52,6 +53,8 @@ return (
 <Route path="/plantas" element={<Plantas />} />
 
 <Route path="/soporte" element={<Soporte />} />
+
+<Route path="*" element={<NotFound />} />
 
 </Routes>
 
