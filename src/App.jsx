@@ -10,12 +10,33 @@ import Soporte from './pages/soporte';
 
 import Dashboard from './Dashboard/Dashboard';
 
+import LoadingScreen from './components/LoadingScreen';
+
 
 
 export const App = () => {
 
 const [nombre, setNombre] = useState('');
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState(false);
 
+ useEffect(() => {
+    const timer = setTimeout(() => {
+      setError(true);
+      setLoading(false);
+    }, 8000); // 8 segundos esperando conexión
+
+    window.addEventListener("load", () => {
+      clearTimeout(timer);
+      setLoading(false);
+    });
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading || error) {
+    return <LoadingScreen error={error} />;
+  }
 
 
 return (
