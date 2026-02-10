@@ -1,5 +1,3 @@
-import '../components/LoadingScreen.css';
-
 const NotFound = () => {
   return (
     <div className="loading-container">
